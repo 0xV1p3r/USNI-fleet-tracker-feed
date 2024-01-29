@@ -1,0 +1,1 @@
+https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_(?!.*-\d+x\d+)\S+\.jpg
