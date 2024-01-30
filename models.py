@@ -1,5 +1,10 @@
+from pydantic import BaseModel
+from datetime import datetime
 
-class TrackerEntry:
-    def __init__(self, image_link):
-        self.image_link = image_link
 
+class TrackerEntry(BaseModel):
+    title: str
+    article_link: str
+    image_url: str
+    image_file_name: str
+    date_string: str
