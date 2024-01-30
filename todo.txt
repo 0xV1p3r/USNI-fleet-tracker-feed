@@ -1,15 +1,7 @@
  - i've got a list of image links now, but they are not sorted by date
  - sometimes USNI does not create a new entry but updates the recent one, need to reflect that
- - make an TrackerEntry object that gives structure to the data & pulls & compiles more data
-
-
-TrackerEntry:
- - id: UUID for storage solution (dunno what yet)
- - image_file_name
- - title
- - image_link
- - date_stringt: 
- - article_link: needs to be pulled as a tag from the image object
+ - the images in the entries in the fleet-tracker category are not always the position images
+   |-> need to start pulling the image from the direct article instead of the entry
 
 Feature ideas:
  - add email backup: meaning you take the file that contains all data & attach to email, that is regularly send to smb
