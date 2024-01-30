@@ -8,11 +8,9 @@ TrackerEntry:
  - image_file_name
  - title
  - image_link
- - date: only date, pulled from image_name
- - time: time and date pulled from html
+ - date_stringt: 
  - article_link: needs to be pulled as a tag from the image object
- - versions: list of the file names of previous versions
- - last_updated: time or None
 
 Feature ideas:
  - add email backup: meaning you take the file that contains all data & attach to email, that is regularly send to smb
+ - add a version history and last_updated property to TrackerEntry
