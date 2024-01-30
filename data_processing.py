@@ -11,13 +11,13 @@ regex_pattern = r"https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_(?!.
 regex_pattern_thumbnail = r"https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_[^\"\']+\.jpg"
 
 
-def fetch_site_data(url):
+def fetch_site_data(url: str) -> str:
     req = Request(url=url, headers={'User-Agent': 'Mozilla/5.0'})
     page = urlopen(req)
     return page.read().decode("utf-8")
 
 
-def find_image_links(html):
+def find_image_links(html: str) -> List[str]:
     image_links_unsorted = re.findall(regex_pattern, html)
     thumbnail_data = image_links_unsorted.pop(0)
     thumbnail_link = re.search(regex_pattern_thumbnail, thumbnail_data).group(0)
@@ -88,7 +88,7 @@ def check_for_new_entries(entry_list: List[TrackerEntry], existing_entries: List
     return new_entries
 
 
-def fetch():
+def fetch() -> List[TrackerEntry]:
     site_data = fetch_site_data("https://news.usni.org/category/fleet-tracker")
     image_url_list = find_image_links(site_data)
 
