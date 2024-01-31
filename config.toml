@@ -4,4 +4,3 @@ refresh_interval = 300
 
 [telegram]
 token = ""
-

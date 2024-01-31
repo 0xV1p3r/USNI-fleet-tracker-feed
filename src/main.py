@@ -1,4 +1,4 @@
-from telegram_bot import wake_bot, send_message
+from telegram_bot import send_message
 from data_processing import fetch
 from models import TrackerEntry
 import datetime
@@ -19,10 +19,6 @@ def handle_update(update: TrackerEntry, configuration):
 
         print(f"{now()} Handler 'telegram' triggered")
         telegram_token = configuration['telegram']['token']
-
-        print(f"{now()} Refreshing chat list...")
-        asyncio.run(wake_bot(token=telegram_token))
-        print(f"{now()} Finished refreshing chat list")
 
         print(f"{now()} Sending messages...")
         asyncio.run(send_message(
@@ -49,4 +45,4 @@ if __name__ == '__main__':
             for entry in new_entries:
                 handle_update(update=entry, configuration=config)
 
-        time.sleep(config['general']['interval'])
+        time.sleep(config['general']['refresh_interval'])

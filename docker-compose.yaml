@@ -1,0 +1,6 @@
+version: "3"
+services:
+  fleet-tracker-feed:
+    image: usni-fleet-tracker-feed
+    volumes:
+      - config.toml:/app/config.toml

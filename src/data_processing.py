@@ -66,9 +66,12 @@ def compile_tracker_entry(article_url: str) -> TrackerEntry:
 def load_existing_entries() -> List[TrackerEntry]:
 
     with open("./tracker_entries.json", "r") as file:
-        entries = json.load(file)
+        data = file.read()
 
-    return entries
+    try:
+        return json.loads(data)
+    except json.decoder.JSONDecodeError:
+        return []
 
 
 def update_existing_entries(entries: List[TrackerEntry]) -> None:
@@ -118,6 +121,7 @@ def fetch() -> List[TrackerEntry]:
         existing_entries.extend(new_entries)
         update_existing_entries(existing_entries)
 
+    new_entries.reverse()
     return new_entries
 
 
