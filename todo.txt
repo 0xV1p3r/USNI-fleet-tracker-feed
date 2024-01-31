@@ -1,7 +1,11 @@
- - i've got a list of image links now, but they are not sorted by date
- - sometimes USNI does not create a new entry but updates the recent one, need to reflect that
- - the images in the entries in the fleet-tracker category are not always the position images
-   |-> need to start pulling the image from the direct article instead of the entry
+ - add config to main loop
+ - add logging (optional logfile)
+
+Handlers (triggered if new entries are found):
+ - Telegram Bot
+ - Email Server
+ - Signal bot (self-hosted)
+ - Signal bot (callmebot API)
 
 Feature ideas:
  - add email backup: meaning you take the file that contains all data & attach to email, that is regularly send to smb
