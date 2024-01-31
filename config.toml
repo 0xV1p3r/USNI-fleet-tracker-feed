@@ -1,0 +1,7 @@
+[general]
+handlers = ["telegram"]
+refresh_interval = 300
+
+[telegram]
+token = ""
+

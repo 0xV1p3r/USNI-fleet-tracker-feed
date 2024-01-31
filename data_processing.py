@@ -3,12 +3,14 @@ from urllib.parse import urlparse
 from models import TrackerEntry
 from bs4 import BeautifulSoup
 from typing import List
+import requests
 import json
 import re
 import os
 
-regex_pattern = r"https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_(?!.*-\d+x\d+)\S+\.jpg"
-regex_pattern_thumbnail = r"https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_[^\"\']+\.jpg"
+regex_pattern_article_url = r"https://news\.usni\.org/\d{4}/\d{2}/\d{2}/usni-news-fleet-and-marine-tracker-\S+"
+regex_pattern_article_url_tail = r"/ft_\d+_\d+_\d+(-\d+)?|ft_\d+_\d+_\d+"
+regex_pattern_image_url = r"https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_(?!.*-\d+x\d+)\S+\.jpg"
 
 
 def fetch_site_data(url: str) -> str:
@@ -17,34 +19,45 @@ def fetch_site_data(url: str) -> str:
     return page.read().decode("utf-8")
 
 
-def find_image_links(html: str) -> List[str]:
-    image_links_unsorted = re.findall(regex_pattern, html)
-    thumbnail_data = image_links_unsorted.pop(0)
-    thumbnail_link = re.search(regex_pattern_thumbnail, thumbnail_data).group(0)
+def find_image_url(html: str) -> str:
+    result = re.findall(regex_pattern_image_url, html)
+    return result[0]
 
-    image_links = [thumbnail_link]
 
-    for link in image_links_unsorted:
-        if link in image_links:
+def find_article_urls(html: str) -> List[str]:
+
+    article_urls_raw: List[str] = re.findall(regex_pattern_article_url, html)
+    article_urls: List[str] = []
+
+    for url in article_urls_raw:
+
+        if re.search(regex_pattern_article_url_tail, url):
             continue
-        image_links.append(link)
 
-    return image_links
+        url = url.replace(r'\ ', '')
+        url = url.replace('"', '')
+        url = url.replace('>', '')
+
+        if url in article_urls:
+            continue
+
+        article_urls.append(url)
+
+    return article_urls
 
 
-def compile_tracker_entry(image_url: str, site_data: str) -> TrackerEntry:
+def compile_tracker_entry(article_url: str) -> TrackerEntry:
 
-    soup = BeautifulSoup(site_data, "html.parser")
-
-    image_tag = soup.find("img", {"data-orig-file": image_url})
-    entry_on_page = image_tag.parent.parent.parent
+    html = fetch_site_data(url=article_url)
+    image_url = find_image_url(html=html)
+    soup = BeautifulSoup(html, "html.parser")
 
     entry_data = {
-        "title": entry_on_page.find("h3", class_="title56 component56").a.string.strip(),
-        "article_link": image_tag.parent["href"],
+        "title": soup.find("h1", class_="post-title single56__title component56").string.strip(),
+        "article_url": article_url,
         "image_url": image_url,
         "image_file_name": os.path.basename(urlparse(image_url).path),
-        "date_string": entry_on_page.find("div", class_="meta56__item meta56__date").string.strip()
+        "date_string": soup.find("div", class_="meta56__item meta56__date").string.strip()
     }
 
     return TrackerEntry(**entry_data)
@@ -90,12 +103,12 @@ def check_for_new_entries(entry_list: List[TrackerEntry], existing_entries: List
 
 def fetch() -> List[TrackerEntry]:
     site_data = fetch_site_data("https://news.usni.org/category/fleet-tracker")
-    image_url_list = find_image_links(site_data)
+    article_urls = find_article_urls(html=site_data)
 
     entry_list: List[TrackerEntry] = []
 
-    for url in image_url_list:
-        entry = compile_tracker_entry(url, site_data)
+    for url in article_urls:
+        entry = compile_tracker_entry(article_url=url)
         entry_list.append(entry)
 
     existing_entries = load_existing_entries()
@@ -106,3 +119,14 @@ def fetch() -> List[TrackerEntry]:
         update_existing_entries(existing_entries)
 
     return new_entries
+
+
+def fetch_image(url: str, file_name: str) -> None:
+
+    image_data = requests.get(url).content
+
+    if not os.path.exists("./images"):
+        os.mkdir("./images")
+
+    with open(f"./images/{file_name}", mode="wb") as f:
+        f.write(image_data)
