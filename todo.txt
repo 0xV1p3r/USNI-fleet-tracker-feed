@@ -6,3 +6,4 @@
 Feature ideas:
  - add email backup: meaning you take the file that contains all data & attach to email, that is regularly send to smb
  - add a version history and last_updated property to TrackerEntry
+ - add a progress tracker, for processed entries into logs
