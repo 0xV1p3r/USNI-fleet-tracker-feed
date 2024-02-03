@@ -5,6 +5,7 @@ Handlers (triggered if new entries are found):
  [ ] Email Server
  [ ] Signal bot (self-hosted)
  [ ] Signal bot (callmebot API)
+ [ ] RSS feed (using rss-feed-genrator container)
 
 Feature ideas:
  - add email backup: meaning you take the file that contains all data & attach to email, that is regularly send to smb
