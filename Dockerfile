@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 COPY ./src /app
 RUN echo "[]" > tracker_entries.json
 
-CMD python3 main.py
+CMD ["python3", "-u", "main.py"]

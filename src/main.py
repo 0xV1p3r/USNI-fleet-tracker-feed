@@ -1,6 +1,7 @@
 from telegram_bot import send_message
 from data_processing import fetch
 from models import TrackerEntry
+import urllib.error
 import datetime
 import asyncio
 import tomllib
@@ -26,7 +27,7 @@ def handle_update(update: TrackerEntry, configuration):
             message=f"{update.title}\n{update.date_string}",
             image_url=update.image_url
             ))
-        print(f"{now()} Finished sending messages")
+        print(f"{now()} Finished sending messages.")
 
 
 if __name__ == '__main__':
@@ -34,15 +35,20 @@ if __name__ == '__main__':
     with open("config.toml", "r") as f:
         config = tomllib.loads(f.read())
 
-    print(f"{now()} Config loaded")
+    print(f"{now()} Config loaded.")
 
     while True:
         print(f"{now()} Fetching data...")
-        new_entries = fetch()
-        print(f"{now()} Finished fetching data. {len(new_entries)} new entries")
 
-        if new_entries:
-            for entry in new_entries:
-                handle_update(update=entry, configuration=config)
+        try:
+            new_entries = fetch()
+            print(f"{now()} Finished fetching data. {len(new_entries)} new entries")
+
+            if new_entries:
+                for entry in new_entries:
+                    handle_update(update=entry, configuration=config)
+
+        except urllib.error.HTTPError:
+            print(f"{now()} Error fetching data. Retrying in {config['general']['refresh_interval']} seconds")
 
         time.sleep(config['general']['refresh_interval'])
