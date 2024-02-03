@@ -1,6 +1,6 @@
 [general]
 handlers = ["telegram"]
-refresh_interval = 300
+refresh_interval = 900
 
 [telegram]
 token = ""
