@@ -22,4 +22,3 @@ async def send_message(token: str, message: str, image_url: str):
         await bot.send_photo(chat_id, image_url)
         await bot.send_message(text=message, chat_id=chat_id)
         logger.debug(f"Sent message to chat_id: {chat_id}")
-        

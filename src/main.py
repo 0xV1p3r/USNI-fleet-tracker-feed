@@ -1,10 +1,10 @@
-from telegram_bot import send_message
 from data_processing import fetch
 from models import TrackerEntry
 import logging.config
 import urllib.error
+import telegram_bot
+import pushover
 import logging
-import datetime
 import asyncio
 import tomllib
 import time
@@ -19,14 +19,26 @@ def handle_update(update: TrackerEntry, configuration):
 
     if "telegram" in configured_handlers:
 
-        logger.debug("Handler 'telegram' triggerd.")
+        logger.debug("Handler 'telegram' triggered.")
         telegram_token = configuration['telegram']['token']
 
-        asyncio.run(send_message(
+        asyncio.run(telegram_bot.send_message(
             token=telegram_token,
             message=f"{update.title}\n{update.date_string}",
             image_url=update.image_url
             ))
+    elif "pushover" in configured_handlers:
+
+        logger.debug("Handler 'pushover' triggered.")
+        pushover_app_token = configuration['pushover']['app_token']
+        pushover_user_token = configuration['pushover']['user_token']
+
+        pushover.send_message(
+            message=f"{update.title}\n{update.date_string}",
+            image_filename=update.image_file_name,
+            user_token=pushover_user_token,
+            app_token=pushover_app_token
+        )
 
 
 if __name__ == '__main__':
