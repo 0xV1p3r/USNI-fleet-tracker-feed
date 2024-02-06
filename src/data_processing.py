@@ -122,6 +122,9 @@ def fetch() -> List[TrackerEntry]:
         new_entries.extend(existing_entries)
         update_existing_entries(new_entries)
 
+        for entry in new_entries:
+            fetch_image(url=entry.image_url, file_name=entry.image_file_name)
+
     return new_entries
 
 
