@@ -80,14 +80,19 @@ def load_existing_entries() -> List[TrackerEntry]:
 
     logger.debug("Function load_existing_entries called")
 
-    with open("./tracker_entries.json", "r") as file:
-        data = file.read()
-
     try:
-        return json.loads(data)
+        with open("./tracker_entries.json", "r") as file:
+            data = json.loads(file.read())
     except json.decoder.JSONDecodeError:
         logger.warning("No existing entries found!")
         return []
+
+    existing_entries: List[TrackerEntry] = []
+
+    for entry_data in data:
+        existing_entries.append(TrackerEntry(**entry_data))
+
+    return existing_entries
 
 
 def update_existing_entries(entries: List[TrackerEntry]) -> None:
@@ -141,11 +146,14 @@ def fetch() -> List[TrackerEntry]:
     new_entries.reverse()
 
     if new_entries:
-        new_entries.extend(existing_entries)
-        update_existing_entries(new_entries)
 
         for entry in new_entries:
-            fetch_image(url=entry["image_url"], file_name=entry["image_file_name"])
+            fetch_image(url=entry.image_url, file_name=entry.image_file_name)
+
+        data = new_entries.copy()
+        data.extend(existing_entries)
+        data.reverse()
+        update_existing_entries(data)
 
     return new_entries
 

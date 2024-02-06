@@ -27,7 +27,8 @@ def handle_update(update: TrackerEntry, configuration):
             message=f"{update.title}\n{update.date_string}",
             image_url=update.image_url
             ))
-    elif "pushover" in configured_handlers:
+
+    if "pushover" in configured_handlers:
 
         logger.debug("Handler 'pushover' triggered.")
         pushover_app_token = configuration['pushover']['app_token']
