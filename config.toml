@@ -1,6 +1,10 @@
 [general]
-handlers = ["telegram"]
+handlers = ["telegram", "callmebot"]
 refresh_interval = 900
 
 [telegram]
 token = ""
+
+[callmebot]
+phone_numbers = []
+api_keys = []
