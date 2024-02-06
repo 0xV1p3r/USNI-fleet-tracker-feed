@@ -1,4 +1,5 @@
  - add logging (optional logfile)
+ - CallMeBot API
  - refactor the whole telegram bot part (add error handling & follow documented best-practices)
 
 Handlers (triggered if new entries are found):
