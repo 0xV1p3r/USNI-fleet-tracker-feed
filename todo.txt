@@ -1,8 +1,7 @@
- - Add ChatID storing to telegram bot
- - refactor the whole telegram bot part (add error handling & follow documented best-practices)
+ - Add Email integration
 
 Handlers (triggered if new entries are found):
- [X] Telegram Bot
+ [ ] Telegram Bot (usin separate container exposing interal API)
  [ ] Email Server
  [ ] Signal bot (self-hosted)
  [X] Pushover API
@@ -11,6 +10,6 @@ Handlers (triggered if new entries are found):
 Feature ideas:
  - add email backup: meaning you take the file that contains all data & attach to email, that is regularly send to smb
  - add a version history and last_updated property to TrackerEntry
- - add a progress tracker, for processed entries into logs (debug only)
  - make a real entry database that also saves the pictures and not only their URLs
+ - develop a telegram bot container following best-practices
  - add the possibility to request the history of search for specific entries via the telegram bot 
