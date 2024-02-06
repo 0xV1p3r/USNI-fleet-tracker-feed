@@ -1,9 +1,6 @@
 [general]
-handlers = ["telegram", "pushover"]
+handlers = ["pushover"]
 refresh_interval = 900
-
-[telegram]
-token = ""
 
 [pushover]
 app_token = ""
