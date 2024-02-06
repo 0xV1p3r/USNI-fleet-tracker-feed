@@ -1,12 +1,13 @@
  - add logging (optional logfile)
- - CallMeBot API
+ - Pushover API
+ - Add ChatID storing to telegram bot
  - refactor the whole telegram bot part (add error handling & follow documented best-practices)
 
 Handlers (triggered if new entries are found):
  [X] Telegram Bot
  [ ] Email Server
  [ ] Signal bot (self-hosted)
- [ ] Signal bot (callmebot API)
+ [ ] Pushover API
  [ ] RSS feed (using rss-feed-genrator container)
 
 Feature ideas:
