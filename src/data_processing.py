@@ -116,12 +116,12 @@ def fetch() -> List[TrackerEntry]:
 
     existing_entries = load_existing_entries()
     new_entries = check_for_new_entries(entry_list=entry_list, existing_entries=existing_entries)
+    new_entries.reverse()
 
     if new_entries:
-        existing_entries.extend(new_entries)
-        update_existing_entries(existing_entries)
+        new_entries.extend(existing_entries)
+        update_existing_entries(new_entries)
 
-    new_entries.reverse()
     return new_entries
 
 
