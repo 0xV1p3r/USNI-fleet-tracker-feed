@@ -1,5 +1,7 @@
 from data_processing import fetch
 from models import TrackerEntry
+from smtp import send_email
+
 import logging.config
 import urllib.error
 import pushover
@@ -27,6 +29,11 @@ def handle_update(update: TrackerEntry, configuration):
             user_token=pushover_user_token,
             app_token=pushover_app_token
         )
+
+    if "smtp" in configured_handlers:
+
+        logger.debug("Handler 'smtp' triggered.")
+        send_email(email_config=configuration["smtp"], tracker_entry=update)
 
 
 if __name__ == '__main__':
