@@ -16,6 +16,9 @@ logger = logging.getLogger("main")
 def handle_update(update: TrackerEntry, configuration):
 
     configured_handlers = configuration['general']['handlers']
+    logger.debug(f"Configured handlers: {configured_handlers}")
+
+    logger.info(f"Sending notification using {configured_handlers}")
 
     if "pushover" in configured_handlers:
 
