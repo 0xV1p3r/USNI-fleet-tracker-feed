@@ -12,7 +12,7 @@ logger = logging.getLogger("smtp")
 
 
 def send_email_starttls(smtp_server, smtp_port, sender_email, password, receiver_emails, message):
-    logger.debug(f"Sending email via STARTTLS using SMTP server {smtp_server}:{smtp_port} with user {sender_email}: {message}")
+    logger.debug(f"Sending email via STARTTLS using SMTP server {smtp_server} with user {sender_email}: {message}")
 
     # Create a secure SSL context
     context = ssl.create_default_context()
@@ -41,7 +41,7 @@ def get_base64_encoded_image(file_name):
 
 
 def send_email_ssl(smtp_server, smtp_port, sender_email, password, receiver_emails, message):
-    logger.debug(f"Sending email via SSL using SMTP server {smtp_server}:{smtp_port} with user {sender_email}: {message}")
+    logger.debug(f"Sending email via SSL using SMTP server {smtp_server} with user {sender_email}: {message}")
 
     # Create a secure SSL context
     context = ssl.create_default_context()
