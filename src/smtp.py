@@ -1,5 +1,6 @@
-import base64
+import logging
 import smtplib
+import base64
 import ssl
 
 from email import encoders
@@ -7,8 +8,11 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+logger = logging.getLogger("smtp")
+
 
 def send_email_starttls(smtp_server, smtp_port, sender_email, password, receiver_emails, message):
+    logger.debug(f"Sending email via STARTTLS using SMTP server {smtp_server}:{smtp_port} with user {sender_email}: {message}")
 
     # Create a secure SSL context
     context = ssl.create_default_context()
@@ -22,18 +26,22 @@ def send_email_starttls(smtp_server, smtp_port, sender_email, password, receiver
         server.login(sender_email, password)
         server.sendmail(from_addr=sender_email, to_addrs=receiver_emails, msg=message.as_string())
     except Exception as e:
-        # Print any error messages to stdout
-        print(e)
+        logger.error(f"Error occurred while sending email: {e}")
     finally:
         server.quit()
 
 
 def get_base64_encoded_image(file_name):
-    with open(f"./images/{file_name}", "rb") as img:
-        return base64.b64encode(img.read())
+    logger.debug(f"Getting base64 encoded image from '{file_name}'")
+    try:
+        with open(f"./images/{file_name}", "rb") as img:
+            return base64.b64encode(img.read())
+    except OSError as e:
+        logger.error(f"Error while encoding '{file_name}': {e}")
 
 
 def send_email_ssl(smtp_server, smtp_port, sender_email, password, receiver_emails, message):
+    logger.debug(f"Sending email via SSL using SMTP server {smtp_server}:{smtp_port} with user {sender_email}: {message}")
 
     # Create a secure SSL context
     context = ssl.create_default_context()
@@ -44,11 +52,18 @@ def send_email_ssl(smtp_server, smtp_port, sender_email, password, receiver_emai
 
 
 def create_image_attachment(file_name):
-    with open(f"./images/{file_name}", "rb") as img:
-        # Add file as application/octet-stream
-        # Email client can usually download this automatically as attachment
-        attachment = MIMEBase("application", "octet-stream")
-        attachment.set_payload(img.read())
+    logger.debug(f"Creating image attachment for '{file_name}'")
+
+    try:
+        with open(f"./images/{file_name}", "rb") as img:
+            # Add file as application/octet-stream
+            # Email client can usually download this automatically as attachment
+            attachment = MIMEBase("application", "octet-stream")
+            attachment.set_payload(img.read())
+    except OSError as e:
+        logger.error(f"Error while creating image attachment for '{file_name}': {e}")
+        return None
+
     encoders.encode_base64(attachment)
     attachment.add_header("Content-Disposition", f"attachment; filename= {file_name}",)
 
@@ -89,7 +104,10 @@ def create_message(sender_email, receiver_emails, tracker_entry):
     img_filename = tracker_entry.image_file_name
     attachment = create_image_attachment(file_name=img_filename)
 
-    message.attach(attachment)
+    if attachment is None:
+        logger.warning(f"Failed to add '{img_filename}' as attachment.")
+    else:
+        message.attach(attachment)
 
     return message
 
@@ -97,7 +115,8 @@ def create_message(sender_email, receiver_emails, tracker_entry):
 def send_email(email_config, tracker_entry):
 
     if email_config["type"] != "STARTTLS" or email_config["type"] != "SSL":
-        pass
+        logger.error(f"'{email_config['type']}' invalid for parameter type. Needs to be STARTTLS or SSL.")
+        return
 
     msg = create_message(
         sender_email=email_config["sender_email"],
