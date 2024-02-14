@@ -114,7 +114,7 @@ def create_message(sender_email, receiver_emails, tracker_entry):
 
 def send_email(email_config, tracker_entry):
 
-    if email_config["type"] != "STARTTLS" or email_config["type"] != "SSL":
+    if email_config["security"] != "STARTTLS" or email_config["security"] != "SSL":
         logger.error(f"'{email_config['type']}' invalid for parameter type. Needs to be STARTTLS or SSL.")
         return
 
@@ -124,7 +124,7 @@ def send_email(email_config, tracker_entry):
         tracker_entry=tracker_entry
     )
 
-    if email_config["type"] == "STARTTLS":
+    if email_config["security"] == "STARTTLS":
         send_email_starttls(
             smtp_server=email_config["server"],
             smtp_port=email_config["port"],
@@ -134,7 +134,7 @@ def send_email(email_config, tracker_entry):
             message=msg
         )
 
-    elif email_config["type"] == "SSL":
+    elif email_config["security"] == "SSL":
         send_email_ssl(
             smtp_server=email_config["server"],
             smtp_port=email_config["port"],

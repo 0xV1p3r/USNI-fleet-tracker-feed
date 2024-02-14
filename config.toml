@@ -9,7 +9,7 @@ user_token = ""
 [smtp]
 server = ""
 port = 587
-type = ""  # STARTTLS or SSL
+security = ""  # STARTTLS or SSL
 sender_email = ""
 password = ""
 receiver_emails = []
