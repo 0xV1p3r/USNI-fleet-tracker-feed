@@ -1,7 +1,15 @@
 [general]
-handlers = ["pushover"]
+handlers = ["pushover", "smtp"]
 refresh_interval = 900
 
 [pushover]
 app_token = ""
 user_token = ""
+
+[smtp]
+server = ""
+port = 587
+type = ""  # STARTTLS or SSL
+sender_email = ""
+password = ""
+receiver_emails = []
