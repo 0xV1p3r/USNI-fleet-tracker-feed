@@ -1,6 +1,10 @@
-version: "3"
 services:
-  fleet-tracker-feed:
-    image: usni-fleet-tracker-feed:latest
+  app:
+    image: usni-fleet-tracker-feed:lastest
     volumes:
-      - config.toml:/app/config.toml
+      - ./config.toml:/app/config.toml
+      - ./tracker_entries.json:/app/tracker_entries.json
+      - ./fleet-tracker.log:/app/fleet-tracker.log
+      - ./images:/app/images
+    environment:
+      - TZ=Europe/Berlin
