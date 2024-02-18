@@ -1,11 +1,13 @@
 from data_processing import fetch
 from models import TrackerEntry
+
 import logging.config
 import urllib.error
 import pushover
 import logging
 import tomllib
 import time
+import smtp
 
 logging.config.fileConfig(fname="logger_config.ini", disable_existing_loggers=False)
 logger = logging.getLogger("main")
@@ -14,6 +16,9 @@ logger = logging.getLogger("main")
 def handle_update(update: TrackerEntry, configuration):
 
     configured_handlers = configuration['general']['handlers']
+    logger.debug(f"Configured handlers: {configured_handlers}")
+
+    logger.info(f"Sending notification using {configured_handlers}")
 
     if "pushover" in configured_handlers:
 
@@ -26,6 +31,15 @@ def handle_update(update: TrackerEntry, configuration):
             image_filename=update.image_file_name,
             user_token=pushover_user_token,
             app_token=pushover_app_token
+        )
+
+    if "smtp" in configured_handlers:
+
+        logger.debug("Handler 'smtp' triggered.")
+        smtp.send_email(
+            email_config=configuration["smtp"],
+            receiver_emails=configuration["smtp"]["receiver_emails"],
+            tracker_entry=update
         )
 
 
