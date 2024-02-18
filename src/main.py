@@ -1,6 +1,5 @@
 from data_processing import fetch
 from models import TrackerEntry
-from smtp import send_email
 
 import logging.config
 import urllib.error
@@ -8,6 +7,7 @@ import pushover
 import logging
 import tomllib
 import time
+import smtp
 
 logging.config.fileConfig(fname="logger_config.ini", disable_existing_loggers=False)
 logger = logging.getLogger("main")
@@ -36,7 +36,11 @@ def handle_update(update: TrackerEntry, configuration):
     if "smtp" in configured_handlers:
 
         logger.debug("Handler 'smtp' triggered.")
-        send_email(email_config=configuration["smtp"], tracker_entry=update)
+        smtp.send_email(
+            email_config=configuration["smtp"],
+            receiver_emails=configuration["smtp"]["receiver_emails"],
+            tracker_entry=update
+        )
 
 
 if __name__ == '__main__':
