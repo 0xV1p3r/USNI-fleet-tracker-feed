@@ -13,7 +13,7 @@ logger = logging.getLogger("data")
 
 regex_pattern_article_url = r"https://news\.usni\.org/\d{4}/\d{2}/\d{2}/usni-news-fleet-and-marine-tracker-\S+"
 regex_pattern_article_url_tail = r"/ft_\d+_\d+_\d+(-\d+)?|ft_\d+_\d+_\d+"
-regex_pattern_image_url = r"https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_(?!.*-\d+x\d+)\S+\.jpg"
+regex_pattern_image_url = r"https://news\.usni\.org/wp-content/uploads/\d{4}/\d{2}/FT_(?!.*-\d+x\d+)\S+\.(jpg|png)"
 
 
 def fetch_site_data(url: str) -> str:
