@@ -6,6 +6,7 @@ Handlers (triggered if new entries are found):
  [ ] RSS feed (using rss-feed-genrator container)
 
 Feature ideas:
+ - add rich logging handler
  - add PGP encryption to Email notifications
  - add email backup: meaning you take the file that contains all data & attach to email, that is regularly send to smb
  - add a version history and last_updated property to TrackerEntry
