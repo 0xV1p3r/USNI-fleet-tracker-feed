@@ -1,4 +1,4 @@
-<img align="left" width="240" height="240" src="https://github.com/LightningV1p3r/assets/blob/main/usni-fleet-tracker-feed/logo.png">
+<img align="left" width="240" height="240" src="https://github.com/0xV1p3r/USNI-fleet-tracker-feed/blob/main/logo.png">
   
 # USNI-fleet-tracker-feed 
 
