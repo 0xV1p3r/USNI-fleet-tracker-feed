@@ -1,6 +1,6 @@
 from urllib.request import urlopen, Request
 from urllib.parse import urlparse
-from models import TrackerEntry
+from models import ScraperTrackerEntry
 from bs4 import BeautifulSoup
 from typing import List
 import requests
@@ -57,7 +57,7 @@ def find_article_urls(html: str) -> List[str]:
     return article_urls
 
 
-def compile_tracker_entry(article_url: str) -> TrackerEntry:
+def compile_tracker_entry(article_url: str) -> ScraperTrackerEntry:
 
     html = fetch_site_data(url=article_url)
     image_url = find_image_url(html=html)
@@ -73,10 +73,10 @@ def compile_tracker_entry(article_url: str) -> TrackerEntry:
 
     logger.debug(f"Function compile_tracker_entry called with result: '{entry_data}'")
 
-    return TrackerEntry(**entry_data)
+    return ScraperTrackerEntry(**entry_data)
 
 
-def load_existing_entries() -> List[TrackerEntry]:
+def load_existing_entries() -> List[ScraperTrackerEntry]:
 
     logger.debug("Function load_existing_entries called")
 
@@ -87,15 +87,15 @@ def load_existing_entries() -> List[TrackerEntry]:
         logger.warning("No existing entries found!")
         return []
 
-    existing_entries: List[TrackerEntry] = []
+    existing_entries: List[ScraperTrackerEntry] = []
 
     for entry_data in data:
-        existing_entries.append(TrackerEntry(**entry_data))
+        existing_entries.append(ScraperTrackerEntry(**entry_data))
 
     return existing_entries
 
 
-def update_existing_entries(entries: List[TrackerEntry]) -> None:
+def update_existing_entries(entries: List[ScraperTrackerEntry]) -> None:
 
     logger.debug("Function update_existing_entries called")
 
@@ -108,11 +108,11 @@ def update_existing_entries(entries: List[TrackerEntry]) -> None:
         file.write(json.dumps(data_to_be_written))
 
 
-def check_for_new_entries(entry_list: List[TrackerEntry], existing_entries: List[TrackerEntry]) -> List[TrackerEntry]:
+def check_for_new_entries(entry_list: List[ScraperTrackerEntry], existing_entries: List[ScraperTrackerEntry]) -> List[ScraperTrackerEntry]:
 
     logger.debug("Function check_for_new_entries called")
 
-    new_entries: List[TrackerEntry] = []
+    new_entries: List[ScraperTrackerEntry] = []
 
     for entry in entry_list:
 
@@ -131,11 +131,11 @@ def check_for_new_entries(entry_list: List[TrackerEntry], existing_entries: List
     return new_entries
 
 
-def fetch() -> List[TrackerEntry]:
+def fetch() -> List[ScraperTrackerEntry]:
     site_data = fetch_site_data("https://news.usni.org/category/fleet-tracker")
     article_urls = find_article_urls(html=site_data)
 
-    entry_list: List[TrackerEntry] = []
+    entry_list: List[ScraperTrackerEntry] = []
 
     for url in article_urls:
         entry = compile_tracker_entry(article_url=url)

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class TrackerEntry(BaseModel):
+class ScraperTrackerEntry(BaseModel):
     title: str
     article_url: str
     image_url: str
