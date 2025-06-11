@@ -1,6 +1,6 @@
 services:
   app:
-    image: usni-fleet-tracker-feed:lastest
+    image: ghcr.io/0xv1p3r/usni-fleet-tracker-feed:lastest
     volumes:
       - ./config.toml:/app/config.toml
       - ./tracker_entries.json:/app/tracker_entries.json
