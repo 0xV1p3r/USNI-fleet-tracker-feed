@@ -1,0 +1,36 @@
+name: Release Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+
+jobs:
+  build-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@main
+
+      - name: 'Login to GitHub Container Registry'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.PAT_TOKEN}}
+
+      - name: 'Build Image'
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          docker build . --tag ghcr.io/0xv1p3r/usni-fleet-tracker-feed:latest --tag ghcr.io/0xv1p3r/usni-fleet-tracker-feed:${VERSION}
+
+      - name: 'Push Image'
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          docker push ghcr.io/0xv1p3r/usni-fleet-tracker-feed:${VERSION}
+          docker push ghcr.io/0xv1p3r/usni-fleet-tracker-feed:latest
+
